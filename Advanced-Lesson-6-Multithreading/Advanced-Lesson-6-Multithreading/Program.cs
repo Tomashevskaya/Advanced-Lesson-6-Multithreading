@@ -13,7 +13,10 @@ namespace Advanced_Lesson_6_Multithreading
             //Lesson.SinglePlayerExample();
             //Lesson.AppDomainPlayersExample();
             //Lesson.MultiThreadingExample();
-            Lesson.ThreadPoolExample();
+            //Lesson.ThreadPoolExample();
+            //Lesson.UnsyncPlayersExample();
+            //Lesson.LockPlayersExample();
+            Lesson.MutexPlayerExample();
 
             Console.ReadLine();
         }

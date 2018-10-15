@@ -48,7 +48,7 @@ namespace Advanced_Lesson_6_Multithreading
             {
                 var thread = new Thread(() =>
                 {
-                    var player = new Player($"Thread {i}", i);
+                    var player = new Player($"Thread {i}");
                     player.Play();
                 });
 
@@ -68,7 +68,7 @@ namespace Advanced_Lesson_6_Multithreading
             {
                 ThreadPool.QueueUserWorkItem((object state) =>
                 {
-                    var player = new Player($"Thread {i}", i);
+                    var player = new Player($"Thread {i}");
                     player.Play();
                 });
 
@@ -80,18 +80,70 @@ namespace Advanced_Lesson_6_Multithreading
             Console.WriteLine("Diagnostic from main thread");
             Diagnostic.ListAllProcessThreads();
         }
+
+        public static void UnsyncPlayersExample()
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                var thread = new Thread(() =>
+                {
+                    var player = new Player($"Thread {i}");
+                    player.List();
+                    player.Play();
+                });
+
+                thread.Start();                
+            }
+        }
+
+        public static void LockPlayersExample()
+        {
+            var obj = new Object();
+
+            for (int i = 1; i <= 3; i++)
+            {
+                var thread = new Thread(() =>
+                {
+                    var player = new Player($"Thread {i}");
+                    lock (obj)
+                    {
+                        player.List();
+                    }                    
+                    player.Play();
+                });
+
+                thread.Start();
+            }
+        }
+
+        public static void MutexPlayerExample()
+        {
+            var mutex = new Mutex();
+
+            for (int i = 1; i <= 3; i++)
+            {
+                var thread = new Thread(() =>
+                {
+                    var player = new Player($"Thread {i}");
+                    mutex.WaitOne();
+                    player.List();
+                    mutex.ReleaseMutex();
+                    player.Play();
+                });
+
+                thread.Start();
+            }
+        }
     }  
 
 
     public class Player
     {
         public string Name { get; set; }
-        private int? _color;
-
-        public Player(string name, int? color = null)
+       
+        public Player(string name)
         {
             this.Name = name;
-            this._color = color;
         }        
 
         public void Play()
@@ -100,13 +152,21 @@ namespace Advanced_Lesson_6_Multithreading
 
             while(counter ++ < 10)
             {
-                if (this._color.HasValue)
-                    Console.BackgroundColor = (ConsoleColor)_color;
-
                 Console.WriteLine($"Playing from instance {this.Name}");
 
                 Thread.Sleep(500);
                 Console.ResetColor();
+            }
+        }
+
+        public void List()
+        {
+            Console.WriteLine($"#{this.Name}:");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine($"---> Song #{i+1}");
+                Thread.Sleep(2);
             }
         }
     }
