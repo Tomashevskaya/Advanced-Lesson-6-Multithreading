@@ -43,7 +43,7 @@ namespace Advanced_Lesson_6_Multithreading
             var player = new TaskPlayer();
             player
                 .PlayAsync()
-                .ContinueWith((task) =>
+                .ContinueWith((playCompletedTask) =>
                 {
                     Console.WriteLine("Player finished playing");
                 });
@@ -150,10 +150,6 @@ namespace Advanced_Lesson_6_Multithreading
             task.Start();
 
             return task;
-        }
-
-        public void EndPlay(IAsyncResult asyncResult)
-        {
         }
     }
 }

@@ -20,7 +20,10 @@ namespace Advanced_Lesson_6_Multithreading
             //Lesson.AsyncPlayerExample();
             //Lesson.AMPPlayerExample();
             //Lesson.EventBasedPlayerExample();
-            Lesson.TaskPlayerExample();
+            //Lesson.TaskPlayerExample();
+            //Lesson.AwaitThreadPlayer();
+            //Lesson.AwaitTaskPlayerExample();
+            Lesson.AwaitTaskPlayerExample2();
 
             Console.WriteLine("Place any key to break...");
             Console.ReadLine();
