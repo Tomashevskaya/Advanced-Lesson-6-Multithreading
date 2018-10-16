@@ -1,6 +1,7 @@
 ﻿using Advanced_Lesson_6_Diagnostic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,6 +26,27 @@ namespace Advanced_Lesson_6_Multithreading
             {
                 Console.WriteLine("Player finished playing");
             }, null);
+        }
+
+        public static void EventBasedPlayerExample()
+        {
+            var player = new EventBasedPlayer();
+            player.PlayCompleted += ((object sender, AsyncCompletedEventArgs e) =>
+            {
+                Console.WriteLine("Player finished playing");
+            });
+            player.PlayAsync();
+        }
+
+        public static void TaskPlayerExample()
+        {
+            var player = new TaskPlayer();
+            player
+                .PlayAsync()
+                .ContinueWith((task) =>
+                {
+                    Console.WriteLine("Player finished playing");
+                });
         }
     }  
 
@@ -102,6 +124,36 @@ namespace Advanced_Lesson_6_Multithreading
 
     public class EventBasedPlayer
     {
+        public event AsyncCompletedEventHandler PlayCompleted;
 
+        public void PlayAsync()
+        {
+            var thread = new Thread(() =>
+            {
+                Console.WriteLine("Playing...");
+                PlayCompleted?.Invoke(this, null);
+            });
+
+            thread.Start();           
+        }        
+    }
+
+    public class TaskPlayer
+    {
+        public Task PlayAsync()
+        {
+            var task = new Task(() =>
+            {
+                Console.WriteLine("Playing...");                
+            });
+
+            task.Start();
+
+            return task;
+        }
+
+        public void EndPlay(IAsyncResult asyncResult)
+        {
+        }
     }
 }

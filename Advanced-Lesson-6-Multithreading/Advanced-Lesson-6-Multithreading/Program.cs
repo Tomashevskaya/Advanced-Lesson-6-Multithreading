@@ -18,7 +18,9 @@ namespace Advanced_Lesson_6_Multithreading
             //Lesson.LockPlayersExample();
             //Lesson.MutexPlayerExample();
             //Lesson.AsyncPlayerExample();
-            Lesson.AMPPlayerExample();
+            //Lesson.AMPPlayerExample();
+            //Lesson.EventBasedPlayerExample();
+            Lesson.TaskPlayerExample();
 
             Console.WriteLine("Place any key to break...");
             Console.ReadLine();
