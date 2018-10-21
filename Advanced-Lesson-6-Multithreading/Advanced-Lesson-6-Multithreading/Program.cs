@@ -27,7 +27,7 @@ namespace Advanced_Lesson_6_Multithreading
             //Lesson.AwaitTaskPlayerExample2();
             //Lesson.AsyncAwaitTaskPlayerExample();
 
-            Practice.Fib();
+            Practice.LA8_P5_5();
 
             Console.WriteLine("Place any key to break...");
             Console.ReadLine();
