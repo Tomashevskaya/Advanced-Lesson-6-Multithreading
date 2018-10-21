@@ -45,6 +45,7 @@
     <Compile Include="Lesson.Await.cs" />
     <Compile Include="Lesson.Async.cs" />
     <Compile Include="Lesson.Processes.cs" />
+    <Compile Include="Practice.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
