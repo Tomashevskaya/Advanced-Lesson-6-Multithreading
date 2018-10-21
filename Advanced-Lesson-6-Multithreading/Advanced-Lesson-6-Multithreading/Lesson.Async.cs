@@ -48,6 +48,19 @@ namespace Advanced_Lesson_6_Multithreading
                     Console.WriteLine("Player finished playing");
                 });
         }
+
+        public static void TaskPlayerExample2()
+        {
+            var player = new TaskPlayer();
+            player
+                .LoadAsync("c://temp")
+                .ContinueWith((loadCompletedTask) =>
+                {
+                    player.Songs = loadCompletedTask.Result;
+                    player.PlayAsync();
+                });
+        }
+
     }  
 
 
@@ -140,11 +153,26 @@ namespace Advanced_Lesson_6_Multithreading
 
     public class TaskPlayer
     {
+        public string[] Songs { get; set; }
+
         public Task PlayAsync()
         {
             var task = new Task(() =>
             {
                 Console.WriteLine("Playing...");                
+            });
+
+            task.Start();
+
+            return task;
+        }
+
+        public Task<string[]> LoadAsync(string folder)
+        {
+            var task = new Task<string[]>(() =>
+            {
+                Console.WriteLine($"Loading songs from {folder} ...");
+                return new string[5];
             });
 
             task.Start();

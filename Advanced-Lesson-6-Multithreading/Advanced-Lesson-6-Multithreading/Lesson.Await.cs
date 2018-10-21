@@ -12,6 +12,7 @@ namespace Advanced_Lesson_6_Multithreading
     public static partial class Lesson
     {
 
+        //Текущий поток блокируется
         public static void AwaitThreadPlayer()
         {
             var player = new AwaitThreadPlayer();
@@ -21,21 +22,29 @@ namespace Advanced_Lesson_6_Multithreading
         }
 
         
-
+        //Текущий поток блокируется
         public static void AwaitTaskPlayerExample()
         {
             var player = new AwaitTaskPlayer();
-            var task = player.Load(new string[5]);
+            var task = player.Load("folder");
             task.Wait();
             player.Play();                
         }
 
+        //Текущий поток не блокируется
         public static void AwaitTaskPlayerExample2()
         {
             var player = new AwaitTaskPlayer();
-            player
-                .Load(new string[5])
-                .ContinueWith((t) => player.Play());           
+            var task = player.Load("folder");
+            task.ContinueWith((t) => player.Play());           
+        }
+
+        
+        public static async Task AsyncAwaitTaskPlayerExample()
+        {
+            var player = new AwaitTaskPlayer();            
+            await player.Load("folder");
+            await player.Play();
         }
     }
 
@@ -67,25 +76,46 @@ namespace Advanced_Lesson_6_Multithreading
 
     public class AwaitTaskPlayer
     {
-        public Task Load(string[] songs)
+        public string[] Songs { get; set; }
+
+        public Task Play()
         {
-            var task = new Task(() =>
+            return Task.Run(() =>
             {
-                for (int i = 0; i < songs.Length; i++)
-                {
-                    Console.WriteLine($"#--> Song #{i + 1} loading");
-                    Thread.Sleep(1000);
-                }
+                Console.WriteLine("Playing...");
             });
-
-            task.Start();
-
-            return task;
         }
 
-        public void Play()
+        public Task Load(string folder)
         {
-            Console.WriteLine("Player is playing...");
+            return Task.Run(() =>
+            {
+                Console.WriteLine($"Loading songs from {folder} ...");
+                this.Songs = new string[5];
+            });
         }
     }
+
+    public class AsyncAwaitTaskPlayer
+    {
+        public string[] Songs { get; set; }
+
+        public Task Play()
+        {
+            return Task.Run(() =>
+            {
+                Console.WriteLine("Playing...");
+            });
+        }
+
+        public Task Load(string folder)
+        {
+            return Task.Run(() =>
+            {
+                Console.WriteLine($"Loading songs from {folder} ...");
+                this.Songs = new string[5];
+            });
+        }
+    }
+ 
 }
